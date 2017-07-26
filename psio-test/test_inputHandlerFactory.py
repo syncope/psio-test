@@ -26,66 +26,22 @@ from psio import inputHandlerFactory
 class TestInputHandlerFactory(unittest.TestCase):
 
     def setUp(self):
-        self.ih1 = h5InputHandler.H5InputHandler()
-        self.ih2 = h5InputHandler.H5InputHandler()
-        self.ih3 = h5InputHandler.H5InputHandler()
+        self.factory = inputHandlerFactory.InputHandlerFactory()
 
-    def test_constructor(self):
-        self.assertIsNone(self.ih1._fileList)
-        self.assertIsNone(self.ih1._fileIter)
-        self.assertIsNone(self.ih1._field)
-        self.assertIsNone(self.ih1._dataIter)
-        self.assertIsNone(self.ih1._nentries)
-        self.assertIsNone(self.ih1._attribute)
-        self.assertFalse(self.ih1._singleValue)
-        self.assertIsNone(self.ih1._currentFile)
-        self.assertEqual(self.ih1._dataDimension, 2)
+    def test_fabio(self):
+        fabobj = self.factory.create("bla.cbf", path=None, attribute=None)
+        self.assertIsInstance(fabobj, inputHandlerFactory.fabioInputHandler.FabioInputHandler)
 
-    def test_listInput(self):
-        pass
+    def test_h5(self):
+        h5obj = self.factory.create("bla.ndf", path="here/is/now", attribute=None)
+        self.assertIsInstance(h5obj, inputHandlerFactory.h5InputHandler.H5InputHandler)
 
-    def test_setDimension(self):
-        pass
-
-    def test_nextFile(self):
-        pass
-
-    def test_nofEntries(self):
-        pass
+    # for now the test makes no sense; everything is mapped to fabio
+    # unless there is a path given, which means that it is a hdf5 file
+    # def test_unknown(self):
+    #   with self.assertRaises(TypeError):
+    #       unknownobj = self.factory.create("some.txt", path=None, attribute=None)
 
 
-'''This a factory that creates implementation objects of an InputHandler.'''
-
-
-from . import fabioInputHandler
-from . import h5InputHandler
-
-
-class InputHandlerFactory():
-
-    '''Simple factory class that creates implementation objects.'''
-
-    def __init__(self):
-        pass
-
-    def create(self, filenames, path, attribute):
-        handlertype = self._determine_handlertype(
-            filenames[0], path, attribute)
-        if(handlertype == "fabio"):
-            return fabioInputHandler.FabioInputHandler()
-        elif (handlertype == "h5"):
-            return h5InputHandler.H5InputHandler()
-        else:
-            raise TypeError("Unrecognized IOHandler type.\
-            Please chose an existing implementation.")
-
-    def _determine_handlertype(self, filename, path, attribute):
-        if(path is None):
-            return "fabio"
-        elif(attribute is None):
-            return "h5"
-        else:
-            return "h5"
-
-if __name__ == "__main__":
-    print("Nothing to test here, the class determines the type and creates a compatible instance.")
+if __name__ == '__main__':
+    unittest.main()
