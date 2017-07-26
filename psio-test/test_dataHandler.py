@@ -25,34 +25,32 @@ from psio import dataHandler
 class TestDataHandler(unittest.TestCase):
 
     def setUp(self):
-        self.ih1 = dataHandler.DataHandler()
-        self.ih2 = dataHandler.DataHandler()
-        self.ih3 = dataHandler.DataHandler()
+        self.dh = dataHandler.DataHandler()
+        self.dhFAB = dataHandler.DataHandler(["test_data/pilatus1m/calib_agbeh_andre_00001_00001.cbf",
+                                              "test_data/hamamatsu_c4880_maxim/c_02.tif",
+                                              "test_data/hamamatsu_c4880_maxim/im_cont2_038.tif"])
+        self.dhH5 = dataHandler.DataHandler("test_data/lambda750ksi/Calli_align_00004.ndf",path="entry/instrument/detector/data")
+        
 
-    def test_constructor(self):
-        self.assertIsNone(self.ih1._fileList)
-        self.assertIsNone(self.ih1._fileIter)
-        self.assertIsNone(self.ih1._field)
-        self.assertIsNone(self.ih1._dataIter)
-        self.assertIsNone(self.ih1._nentries)
-        self.assertIsNone(self.ih1._attribute)
-        self.assertFalse(self.ih1._singleValue)
-        self.assertIsNone(self.ih1._currentFile)
-        self.assertEqual(self.ih1._dataDimension, 2)
+    def test_getters(self):
+        self.assertEqual(self.dhH5.getTotalNumberOfEntries(), 1)
+        self.assertEqual(self.dhFAB.getTotalNumberOfEntries(), 3)
+        self.assertIsNotNone(self.dhH5.getEntry(0))
+        with self.assertRaises(TypeError):
+            self.dhFAB.getEntry(1)
+        with self.assertRaises(IndexError):
+            self.dhH5.getEntry(1)
 
-    def test_listInput(self):
-        pass
+    def test_Iteration(self):
+        for d in self.dhFAB:
+            pass
+        for k in self.dhH5:
+            pass
 
-    def test_setDimension(self):
-        pass
-
-    def test_nextFile(self):
-        pass
-
-    def test_nofEntries(self):
-        pass
-
-
+    def tearDown(self):
+        self.dhFAB = None
+        self.dhH5 = None
+        self.dh = None
 
 if __name__ == '__main__':
     unittest.main()
