@@ -24,91 +24,93 @@ from psio import fabioInputHandler
 
 class TestFabioInputHandler(unittest.TestCase):
 
-    def setUp(self):
-        self.ih1 = h5InputHandler.H5InputHandler()
-        self.ih2 = h5InputHandler.H5InputHandler()
-        self.ih3 = h5InputHandler.H5InputHandler()
-
-    def test_constructor(self):
-        self.assertIsNone(self.ih1._fileList)
-        self.assertIsNone(self.ih1._fileIter)
-        self.assertIsNone(self.ih1._field)
-        self.assertIsNone(self.ih1._dataIter)
-        self.assertIsNone(self.ih1._nentries)
-        self.assertIsNone(self.ih1._attribute)
-        self.assertFalse(self.ih1._singleValue)
-        self.assertIsNone(self.ih1._currentFile)
-        self.assertEqual(self.ih1._dataDimension, 2)
-
-    def test_listInput(self):
-        pass
-
-    def test_setDimension(self):
-        pass
-
-    def test_nextFile(self):
-        pass
-
-    def test_nofEntries(self):
-        pass
+     def setUp(self):
+        files = ["test/test_data/pilatus1m/calib_agbeh_andre_00001_00001.cbf",
+                 "test/test_data/hamamatsu_c4880_maxim/c_02.tif",
+                 "test/test_data/hamamatsu_c4880_maxim/im_cont2_038.tif"]
 
 
-'''This is an implementation of the file handler based on fabio.
-Please find more information on fabio in the source code of this file.
-Or take a look at http://dx.doi.org/10.1107/S0021889813000150 .'''
+        self.dataHandle = h5InputHandler.H5InputHandler()
+        self.dAttHandle = h5InputHandler.H5InputHandler()
+        self.files = ["test_data/lambda750ksi/Calli_align_00004.ndf", ]
+        self.path = "entry/instrument/detector/"
+        self.dataName = "data"
+        self.dPath = self.path+self.dataName
+        self.dDim = (516, 1556)
+        self.dAtt = "count_time"
+        self.dAttKey = "units"
+        self.dAttVal = "millisecond"
+        self.dataHandle2 = h5InputHandler.H5InputHandler(
+            files=self.files, path=self.dPath)
+        self.dAttHandle2 = h5InputHandler.H5InputHandler(
+            files=self.files, path=self.dPath, attribute=self.dAtt)
+
+    def test_emptyConstructor(self):
+        self.assertIsNone(self.dataHandle._fileList)
+        self.assertIsNone(self.dataHandle._fileIter)
+        self.assertIsNone(self.dataHandle._dataset)
+        self.assertIsNone(self.dataHandle._dataIter)
+        self.assertIsNone(self.dataHandle._nentries)
+        self.assertIsNone(self.dataHandle._attribute)
+        self.assertFalse(self.dataHandle._singleValue)
+        self.assertIsNone(self.dataHandle._currentFile)
+        self.assertEqual(self.dataHandle._imageDataDimension, 2)
+
+    def test_pathConstructor(self):
+        self.assertEqual(self.dataHandle2._fileList, self.files)
+        self.assertIsNotNone(self.dataHandle2._fileIter)
+        self.assertIsNone(self.dataHandle2._dataIter)
+        self.assertIsNone(self.dataHandle2._nentries)
+        self.assertIsNone(self.dataHandle2._attribute)
+        self.assertFalse(self.dataHandle2._singleValue)
+        self.assertIsNone(self.dataHandle2._currentFile)
+        self.assertEqual(self.dataHandle2._imageDataDimension, 2)
+
+    def test_attributeConstructor(self):
+        self.assertEqual(self.dAttHandle2._fileList, self.files)
+        self.assertIsNotNone(self.dAttHandle2._fileIter)
+        self.assertIsNotNone(self.dAttHandle2._dataset)
+        self.assertIsNone(self.dAttHandle2._dataIter)
+        self.assertIsNone(self.dAttHandle2._nentries)
+        self.assertIsNotNone(self.dAttHandle2._attribute)
+        self.assertFalse(self.dAttHandle2._singleValue)
+        self.assertIsNone(self.dAttHandle2._currentFile)
+        self.assertEqual(self.dAttHandle2._imageDataDimension, 2)
+
+    def test_inputList(self):
+        self.dataHandle.inputList(self.files, self.dPath)
+        self.assertEqual(self.dataHandle._fileList, self.files)
+        self.assertIsNotNone(self.dataHandle._fileIter)
+        self.assertIsNone(self.dataHandle._dataIter)
+        self.assertIsNone(self.dataHandle._nentries)
+        self.assertIsNone(self.dataHandle._attribute)
+        self.assertFalse(self.dataHandle._singleValue)
+        self.assertIsNone(self.dataHandle._currentFile)
+        self.assertEqual(self.dataHandle._imageDataDimension, 2)
+
+        self.dAttHandle.inputList(self.files, self.dPath, self.dAtt)
+        self.assertEqual(self.dAttHandle._fileList, self.files)
+        self.assertIsNotNone(self.dAttHandle._fileIter)
+        self.assertIsNotNone(self.dAttHandle._dataset)
+        self.assertIsNone(self.dAttHandle._dataIter)
+        self.assertIsNone(self.dAttHandle._nentries)
+        self.assertIsNotNone(self.dAttHandle._attribute)
+        self.assertFalse(self.dAttHandle._singleValue)
+        self.assertIsNone(self.dAttHandle._currentFile)
+        self.assertEqual(self.dAttHandle._imageDataDimension, 2)
+
+    def test_getEntry(self):
+        self.assertIsNotNone(self.dataHandle2.getEntry(0))
+        self.assertIsNotNone(self.dAttHandle2.getEntry(0))
+        with self.assertRaises(IndexError):
+            self.dataHandle2.getEntry(1)
+        with self.assertRaises(IndexError):
+            self.dAttHandle2.getEntry(1)
+
+    def test_getNofEntries(self):
+        self.assertEqual(self.dataHandle2.getTotalNumberOfEntries(), 1)
+        self.assertEqual(self.dAttHandle2.getTotalNumberOfEntries(), 1)
 
 
-import fabio
-from . import inputHandler
-from future.utils import implements_iterator
-
-
-@implements_iterator
-class FabioInputHandler(inputHandler.InputHandler):
-
-    def __init__(self):
-        '''Construct by creating empty member variables.'''
-        self._fileList = None
-        self._ddata = None
-
-    def inputList(self, filenames, paths=None, attribute=None):
-        '''Pass and store the list of files that are to be opened.'''
-        self._fileList = filenames
-        self._fileIter = iter(self._fileList)
-
-    def __iter__(self):
-        '''Part one of iterator protocol implementation.'''
-        return self
-
-    def __next__(self):
-        '''Part two of iterator protocol implementation.'''
-        # advance the file iterator
-        if(inputHandler.six.PY2):
-            aFile = self._fileIter.next()
-        else:
-            aFile = self._fileIter.__next__()
-        # try to read the file and its data
-        try:
-            imagestream = fabio.open(aFile)
-            self._ddata = imagestream.data
-        except IOError:
-            self._ddata = None
-        return self._ddata
-
-    if(inputHandler.six.PY2):
-        def next(self):
-            self.__next__()
-
-if __name__ == "__main__":
-    print("Do simple testing by running as a script.")
-    print("Requires the test data to be present.\n")
-
-    print("Trying to read different file formats and print its contents:")
-    files = ["test/test_data/pilatus1m/calib_agbeh_andre_00001_00001.cbf",
-             "test/test_data/hamamatsu_c4880_maxim/c_02.tif",
-             "test/test_data/hamamatsu_c4880_maxim/im_cont2_038.tif"]
-
-    io = FabioInputHandler()
-    io.inputList(files)
-    for i in io:
-        print(repr(i))
+if __name__ == '__main__':
+    unittest.main()
