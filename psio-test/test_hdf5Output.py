@@ -25,96 +25,39 @@ from psio import hdf5Output
 class TestHDF5Output(unittest.TestCase):
 
     def setUp(self):
-        self.ih1 = h5InputHandler.H5InputHandler()
-        self.ih2 = h5InputHandler.H5InputHandler()
-        self.ih3 = h5InputHandler.H5InputHandler()
+        self.out = hdf5Output.HDF5Output("test.h5", mode='w')
+        self.out2 = hdf5Output.HDF5Output("test2.h5", mode='w')
+        self.out2.addDataField("test", (0, 2, 2))
+        self.out2.addDataField("test2", (2, 2))
+        
+#~ 
+    #~ def test_constructor(self):
+        #~ pass
+#~ 
+    #~ def test_write(self):
+        #~ pass
+#~ 
+    #~ def test_close(self):
+        #~ pass
 
-    def test_constructor(self):
-        self.assertIsNone(self.ih1._fileList)
-        self.assertIsNone(self.ih1._fileIter)
-        self.assertIsNone(self.ih1._field)
-        self.assertIsNone(self.ih1._dataIter)
-        self.assertIsNone(self.ih1._nentries)
-        self.assertIsNone(self.ih1._attribute)
-        self.assertFalse(self.ih1._singleValue)
-        self.assertIsNone(self.ih1._currentFile)
-        self.assertEqual(self.ih1._dataDimension, 2)
+    def test_addAttribute(self):
+        self.out2.addAttributeToField("test2", "answer", 42.)
+        #~ with self.assertRaises(KeyError):
+            #~ self.out.addAttributeToField("adsdsfa", "answer", 42.)
 
-    def test_listInput(self):
-        pass
+    def test_addComment(self):
+        self.out2.addCommentToField("test", "com2", "we dont need no")
+        #~ with self.assertRaises(KeyError):
+                #~ self.out2.addCommentToField("something", "com2", "we dont need no")
 
-    def test_setDimension(self):
-        pass
+    def test_addDataField(self):
+        self.out.addDataField("test", (0, 2, 2))
+        self.out.addDataField("test2", (2, 2))
 
-    def test_nextFile(self):
-        pass
+        with self.assertRaises(ValueError):
+            self.out.addDataField("test", (0, 2, 2))
+        #~ with self.assertRaises(AttributeError):
+            #~ self.out.addDataField("test", (0, 2, 2))
 
-    def test_nofEntries(self):
-        pass
-
-
-'''Implementation for handling files based on HDF without pni library.
-Structure is the same, as well as the functionality.'''
-
-from . import outputBase
-import h5py
-import numpy as np
-
-
-class HDF5Output(outputBase.OutputBase):
-
-    def __init__(self, filename, mode='w'):
-        self._file = h5py.File(filename, mode=mode)
-        self._entry = self._file.create_group("entry")
-        self._entry.attrs["NX_class"] = "NXentry"
-        self._defaultGroup = self._entry.create_group("data")
-        self._defaultGroup.attrs["NX_class"] = "NXdata"
-        # datasets are called fields in nexus
-        self._datasets = {}
-
-    def write(self):
-        self._file.flush()
-
-    def close(self):
-        self.write()
-        self._file.close()
-
-    def addDataField(self, name, data):
-        '''Add data to the default location.'''
-        # size and shape are taken directly from data
-        try:
-            if name in self._datasets:
-                raise ValueError("Trying to create a field/dataset"
-                                 " that already exists.")
-            else:
-                self._datasets[name] = self._defaultGroup.create_dataset(
-                    name=name, data=data)
-        except AttributeError:
-            print("Could not create a field to hold images/data.")
-
-    def addAttributeToField(self, fieldname, title, value):
-        pass
-        try:
-            self._datasets[fieldname].attrs.create(title, value)
-        except KeyError:
-            print("Field " + fieldname + " doesn't exist.")
-
-    def addCommentToField(self, fieldname, title, comment):
-        pass
-        try:
-            self._datasets[fieldname].attrs.create(title, np.string_(comment))
-        except KeyError:
-            print("Field " + fieldname + " doesn't exist.")
-
-
-if(__name__ == "__main__"):
-    print("Testing the output capabilities.")
-
-    no = HDF5Output("test.h5", mode='w')
-    no.addDataField("test", (0, 2, 2))
-    no.addDataField("test2", (2, 2))
-    no.addCommentToField("test", "com2", "we dont need no")
-    no.addAttributeToField("test2", "answer", 42.)
-
-    no.close()
-    print("In case of success a new file called test.h5 should have been created.")
+if __name__ == '__main__':
+    unittest.main()
