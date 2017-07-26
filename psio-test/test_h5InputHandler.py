@@ -27,7 +27,7 @@ class TestH5InputHandler(unittest.TestCase):
     def setUp(self):
         self.dataHandle = h5InputHandler.H5InputHandler()
         self.dAttHandle = h5InputHandler.H5InputHandler()
-        self.files = ["test_data/lambda750ksi/Calli_align_00004.ndf",]
+        self.files = ["test_data/lambda750ksi/Calli_align_00004.ndf", ]
         self.path = "entry/instrument/detector/"
         self.dataName = "data"
         self.dPath = self.path+self.dataName
@@ -38,7 +38,7 @@ class TestH5InputHandler(unittest.TestCase):
         self.dataHandle2 = h5InputHandler.H5InputHandler(
             files=self.files, path=self.dPath)
         self.dAttHandle2 = h5InputHandler.H5InputHandler(
-            files=self.files, path=self.dPath, attribute=self.dAtt )
+            files=self.files, path=self.dPath, attribute=self.dAtt)
 
     def test_emptyConstructor(self):
         self.assertIsNone(self.dataHandle._fileList)
@@ -74,7 +74,6 @@ class TestH5InputHandler(unittest.TestCase):
 
     def test_inputList(self):
         self.dataHandle.inputList(self.files, self.dPath)
-        self.dAttHandle.inputList(self.files, self.dPath, self.dAtt)
         self.assertEqual(self.dataHandle._fileList, self.files)
         self.assertIsNotNone(self.dataHandle._fileIter)
         self.assertIsNone(self.dataHandle._dataIter)
@@ -83,6 +82,8 @@ class TestH5InputHandler(unittest.TestCase):
         self.assertFalse(self.dataHandle._singleValue)
         self.assertIsNone(self.dataHandle._currentFile)
         self.assertEqual(self.dataHandle._imageDataDimension, 2)
+
+        self.dAttHandle.inputList(self.files, self.dPath, self.dAtt)
         self.assertEqual(self.dAttHandle._fileList, self.files)
         self.assertIsNotNone(self.dAttHandle._fileIter)
         self.assertIsNotNone(self.dAttHandle._dataset)
@@ -93,20 +94,18 @@ class TestH5InputHandler(unittest.TestCase):
         self.assertIsNone(self.dAttHandle._currentFile)
         self.assertEqual(self.dAttHandle._imageDataDimension, 2)
 
-
-    def test_setDimension(self):
-        pass
-
-    def test_nextFile(self):
-        pass
+    def test_getEntry(self):
+        self.assertIsNotNone(self.dataHandle2.getEntry(0))
+        self.assertIsNotNone(self.dAttHandle2.getEntry(0))
+        with self.assertRaises(IndexError):
+            self.dataHandle2.getEntry(1)
+        with self.assertRaises(IndexError):
+            self.dAttHandle2.getEntry(1)
 
     def test_getNofEntries(self):
-        self.assertEqual(self.dataHandle.getNumberOfEntries(), 1)
-        self.assertEqual(self.dataHandle.getNumberOfEntries(), 1)
-        self.assertEqual(self.dataHandle.getNumberOfEntries(), 1)
-        self.assertEqual(self.dataHandle.getNumberOfEntries(), 1)
+        self.assertEqual(self.dataHandle2.getTotalNumberOfEntries(), 1)
+        self.assertEqual(self.dAttHandle2.getTotalNumberOfEntries(), 1)
 
 
 if __name__ == '__main__':
     unittest.main()
-
