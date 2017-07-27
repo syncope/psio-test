@@ -4,6 +4,6 @@ It is much larger in size due to the presence of test data, which is two orders 
 
 To run the tests obviously psio must be installed, then the commands
 
-psio_tests.run() or psio_tests.run_tests()
+psio_test.run() or psio_test.run_tests()
 
 will execute the tests and show a report.
