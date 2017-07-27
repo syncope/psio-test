@@ -24,92 +24,32 @@ from psio import fabioInputHandler
 
 class TestFabioInputHandler(unittest.TestCase):
 
-     def setUp(self):
-        files = ["test/test_data/pilatus1m/calib_agbeh_andre_00001_00001.cbf",
+    def setUp(self):
+        self.files = ["test/test_data/pilatus1m/calib_agbeh_andre_00001_00001.cbf",
                  "test/test_data/hamamatsu_c4880_maxim/c_02.tif",
                  "test/test_data/hamamatsu_c4880_maxim/im_cont2_038.tif"]
-
-
-        self.dataHandle = h5InputHandler.H5InputHandler()
-        self.dAttHandle = h5InputHandler.H5InputHandler()
-        self.files = ["test_data/lambda750ksi/Calli_align_00004.ndf", ]
-        self.path = "entry/instrument/detector/"
-        self.dataName = "data"
-        self.dPath = self.path+self.dataName
-        self.dDim = (516, 1556)
-        self.dAtt = "count_time"
-        self.dAttKey = "units"
-        self.dAttVal = "millisecond"
-        self.dataHandle2 = h5InputHandler.H5InputHandler(
-            files=self.files, path=self.dPath)
-        self.dAttHandle2 = h5InputHandler.H5InputHandler(
-            files=self.files, path=self.dPath, attribute=self.dAtt)
+        self.dataHandle = fabioInputHandler.FabioInputHandler()
+        self.dataHandle2 = fabioInputHandler.FabioInputHandler(files=self.files)
 
     def test_emptyConstructor(self):
         self.assertIsNone(self.dataHandle._fileList)
         self.assertIsNone(self.dataHandle._fileIter)
-        self.assertIsNone(self.dataHandle._dataset)
-        self.assertIsNone(self.dataHandle._dataIter)
-        self.assertIsNone(self.dataHandle._nentries)
-        self.assertIsNone(self.dataHandle._attribute)
-        self.assertFalse(self.dataHandle._singleValue)
-        self.assertIsNone(self.dataHandle._currentFile)
-        self.assertEqual(self.dataHandle._imageDataDimension, 2)
 
-    def test_pathConstructor(self):
+    def test_fileConstructor(self):
         self.assertEqual(self.dataHandle2._fileList, self.files)
         self.assertIsNotNone(self.dataHandle2._fileIter)
-        self.assertIsNone(self.dataHandle2._dataIter)
-        self.assertIsNone(self.dataHandle2._nentries)
-        self.assertIsNone(self.dataHandle2._attribute)
-        self.assertFalse(self.dataHandle2._singleValue)
-        self.assertIsNone(self.dataHandle2._currentFile)
-        self.assertEqual(self.dataHandle2._imageDataDimension, 2)
-
-    def test_attributeConstructor(self):
-        self.assertEqual(self.dAttHandle2._fileList, self.files)
-        self.assertIsNotNone(self.dAttHandle2._fileIter)
-        self.assertIsNotNone(self.dAttHandle2._dataset)
-        self.assertIsNone(self.dAttHandle2._dataIter)
-        self.assertIsNone(self.dAttHandle2._nentries)
-        self.assertIsNotNone(self.dAttHandle2._attribute)
-        self.assertFalse(self.dAttHandle2._singleValue)
-        self.assertIsNone(self.dAttHandle2._currentFile)
-        self.assertEqual(self.dAttHandle2._imageDataDimension, 2)
 
     def test_inputList(self):
-        self.dataHandle.inputList(self.files, self.dPath)
+        self.dataHandle.inputList(self.files)
         self.assertEqual(self.dataHandle._fileList, self.files)
         self.assertIsNotNone(self.dataHandle._fileIter)
-        self.assertIsNone(self.dataHandle._dataIter)
-        self.assertIsNone(self.dataHandle._nentries)
-        self.assertIsNone(self.dataHandle._attribute)
-        self.assertFalse(self.dataHandle._singleValue)
-        self.assertIsNone(self.dataHandle._currentFile)
-        self.assertEqual(self.dataHandle._imageDataDimension, 2)
-
-        self.dAttHandle.inputList(self.files, self.dPath, self.dAtt)
-        self.assertEqual(self.dAttHandle._fileList, self.files)
-        self.assertIsNotNone(self.dAttHandle._fileIter)
-        self.assertIsNotNone(self.dAttHandle._dataset)
-        self.assertIsNone(self.dAttHandle._dataIter)
-        self.assertIsNone(self.dAttHandle._nentries)
-        self.assertIsNotNone(self.dAttHandle._attribute)
-        self.assertFalse(self.dAttHandle._singleValue)
-        self.assertIsNone(self.dAttHandle._currentFile)
-        self.assertEqual(self.dAttHandle._imageDataDimension, 2)
 
     def test_getEntry(self):
-        self.assertIsNotNone(self.dataHandle2.getEntry(0))
-        self.assertIsNotNone(self.dAttHandle2.getEntry(0))
-        with self.assertRaises(IndexError):
+        with self.assertRaises(TypeError):
             self.dataHandle2.getEntry(1)
-        with self.assertRaises(IndexError):
-            self.dAttHandle2.getEntry(1)
 
     def test_getNofEntries(self):
-        self.assertEqual(self.dataHandle2.getTotalNumberOfEntries(), 1)
-        self.assertEqual(self.dAttHandle2.getTotalNumberOfEntries(), 1)
+        self.assertEqual(self.dataHandle2.getTotalNumberOfEntries(), 3)
 
 
 if __name__ == '__main__':
