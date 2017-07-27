@@ -22,3 +22,29 @@
 import unittest
 
 # still to write: include all test cases into a test suite
+import test_dataHandler
+import test_fabioInputHandler
+import test_h5InputHandler
+import test_hdf5Output
+import test_inputHandlerFactory
+
+
+
+def run():
+    # initialize the test suite
+    loader = unittest.TestLoader()
+    suite  = unittest.TestSuite()
+
+    # add tests to the test suite
+    suite.addTests(loader.loadTestsFromModule(test_dataHandler))
+    suite.addTests(loader.loadTestsFromModule(test_fabioInputHandler))
+    suite.addTests(loader.loadTestsFromModule(test_h5InputHandler))
+    suite.addTests(loader.loadTestsFromModule(test_hdf5Output))
+    suite.addTests(loader.loadTestsFromModule(test_inputHandlerFactory))
+
+    # initialize a runner, pass it your suite and run it
+    runner = unittest.TextTestRunner(verbosity=3)
+    result = runner.run(suite)
+
+def run_tests():
+    run()
