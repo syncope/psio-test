@@ -24,40 +24,37 @@ from psio import hdf5Output
 
 class TestHDF5Output(unittest.TestCase):
 
-    def setUp(self):
-        self.out = hdf5Output.HDF5Output("test.h5", mode='w')
-        self.out2 = hdf5Output.HDF5Output("test2.h5", mode='w')
-        self.out2.addDataField("test", (0, 2, 2))
-        self.out2.addDataField("test2", (2, 2))
-        
-#~ 
-    #~ def test_constructor(self):
-        #~ pass
-#~ 
-    #~ def test_write(self):
-        #~ pass
-#~ 
-    #~ def test_close(self):
-        #~ pass
+    def test_constructor(self):
+        hdf5Output.HDF5Output("hdf5test.h5", mode='w')
+
+    def test_write(self):
+        out2 = hdf5Output.HDF5Output("hdf5test2.h5", mode='w')
+        out2.addDataField("test", (0, 2, 2))
+        out2.write()
+        out2.close()
+
+    def test_close(self):
+        out2 = hdf5Output.HDF5Output("hdf5test2.h5", mode='w')
+        out2.close()
 
     def test_addAttribute(self):
-        self.out2.addAttributeToField("test2", "answer", 42.)
-        #~ with self.assertRaises(KeyError):
-            #~ self.out.addAttributeToField("adsdsfa", "answer", 42.)
+        out2 = hdf5Output.HDF5Output("hdf5test2.h5", mode='w')
+        out2.addDataField("test", (0, 2, 2))
+        out2.addDataField("test2", (2, 2))
+        out2.addAttributeToField("test2", "answer", 42.)
+        out2.close()
 
     def test_addComment(self):
-        self.out2.addCommentToField("test", "com2", "we dont need no")
-        #~ with self.assertRaises(KeyError):
-                #~ self.out2.addCommentToField("something", "com2", "we dont need no")
+        out2 = hdf5Output.HDF5Output("hdf5test2.h5", mode='w')
+        out2.addDataField("test", (0, 2, 2))
+        out2.addDataField("test2", (2, 2))
+        out2.addCommentToField("test", "com2", "we dont need no")
+        out2.close()
 
     def test_addDataField(self):
-        self.out.addDataField("test", (0, 2, 2))
-        self.out.addDataField("test2", (2, 2))
-
-        with self.assertRaises(ValueError):
-            self.out.addDataField("test", (0, 2, 2))
-        #~ with self.assertRaises(AttributeError):
-            #~ self.out.addDataField("test", (0, 2, 2))
+        out2 = hdf5Output.HDF5Output("hdf5test2.h5", mode='w')
+        out2.addDataField("test", (0, 2, 2))
+        out2.close()
 
 if __name__ == '__main__':
     unittest.main()
