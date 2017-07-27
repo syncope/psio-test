@@ -8,18 +8,18 @@ with open(path.join('.', 'README.rst'), encoding='utf-8') as f:
 
 from sphinx.setup_command import BuildDoc
 
-name='psio-test'
+name='psio_test'
 version='0'
 release='0.1.0'
 
 setup(
-    name='psio-test',
+    name='psio_test',
     version='0.1.0',
 
     description='Module to test psio, an easy access library for photon science data in different formats.', 
     long_description=long_description,
 
-    url='https://github.com/syncope/psio-test',
+    url='https://github.com/syncope/psio_test',
 
     author='Ch.Rosemann',
     author_email='christoph.rosemann@desy.de',
@@ -40,9 +40,9 @@ setup(
 
     keywords='photon science file input output test library',
     
-    packages=['psio-test',],
+    packages=['psio_test',],
     
-    package_dir = { 'psio-test':'psio-test',},
+    package_dir = { 'psio_test':'psio_test',},
     
 )
 
