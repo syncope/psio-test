@@ -25,7 +25,8 @@ from psio import hdf5Output
 class TestHDF5Output(unittest.TestCase):
 
     def test_constructor(self):
-        hdf5Output.HDF5Output("hdf5test.h5", mode='w')
+        o = hdf5Output.HDF5Output("hdf5test.h5", mode='w')
+        o.close()
 
     def test_write(self):
         out2 = hdf5Output.HDF5Output("hdf5test2.h5", mode='w')
