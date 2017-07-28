@@ -6,8 +6,6 @@ from os import path
 with open(path.join('.', 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
-from sphinx.setup_command import BuildDoc
-
 name='psio_test'
 version='0'
 release='0.1.0'
@@ -43,6 +41,7 @@ setup(
     packages=['psio_test',],
     
     package_dir = { 'psio_test':'psio_test',},
-    
+
+    include_package_data=True,
 )
 
