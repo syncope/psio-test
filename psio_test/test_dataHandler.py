@@ -26,10 +26,10 @@ class TestDataHandler(unittest.TestCase):
 
     def setUp(self):
         self.dh = dataHandler.DataHandler()
-        self.dhFAB = dataHandler.DataHandler(["test_data/pilatus1m/calib_agbeh_andre_00001_00001.cbf",
-                                              "test_data/hamamatsu_c4880_maxim/c_02.tif",
-                                              "test_data/hamamatsu_c4880_maxim/im_cont2_038.tif"])
-        self.dhH5 = dataHandler.DataHandler("test_data/lambda750ksi/Calli_align_00004.ndf",path="entry/instrument/detector/data")
+        self.dhFAB = dataHandler.DataHandler(["psio_test/test_data/pilatus1m/calib_agbeh_andre_00001_00001.cbf",
+                                              "psio_test/test_data/hamamatsu_c4880_maxim/c_02.tif",
+                                              "psio_test/test_data/hamamatsu_c4880_maxim/im_cont2_038.tif"])
+        self.dhH5 = dataHandler.DataHandler("psio_test/test_data/lambda750ksi/Calli_align_00004.ndf",path="entry/instrument/detector/data")
         
 
     def test_getters(self):

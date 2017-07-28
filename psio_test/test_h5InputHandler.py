@@ -27,7 +27,7 @@ class TestH5InputHandler(unittest.TestCase):
     def setUp(self):
         self.dataHandle = h5InputHandler.H5InputHandler()
         self.dAttHandle = h5InputHandler.H5InputHandler()
-        self.files = ["test_data/lambda750ksi/Calli_align_00004.ndf", ]
+        self.files = ["psio_test/test_data/lambda750ksi/Calli_align_00004.ndf", ]
         self.path = "entry/instrument/detector/"
         self.dataName = "data"
         self.dPath = self.path+self.dataName

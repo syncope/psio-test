@@ -25,9 +25,9 @@ from psio import fabioInputHandler
 class TestFabioInputHandler(unittest.TestCase):
 
     def setUp(self):
-        self.files = ["test/test_data/pilatus1m/calib_agbeh_andre_00001_00001.cbf",
-                 "test/test_data/hamamatsu_c4880_maxim/c_02.tif",
-                 "test/test_data/hamamatsu_c4880_maxim/im_cont2_038.tif"]
+        self.files = ["psio_test/test_data/pilatus1m/calib_agbeh_andre_00001_00001.cbf",
+                 "psio_test/test_data/hamamatsu_c4880_maxim/c_02.tif",
+                 "psio_test/test_data/hamamatsu_c4880_maxim/im_cont2_038.tif"]
         self.dataHandle = fabioInputHandler.FabioInputHandler()
         self.dataHandle2 = fabioInputHandler.FabioInputHandler(files=self.files)
 
