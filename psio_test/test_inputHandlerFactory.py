@@ -36,6 +36,10 @@ class TestInputHandlerFactory(unittest.TestCase):
         h5obj = self.factory.create("bla.ndf", path="here/is/now", attribute=None)
         self.assertIsInstance(h5obj, inputHandlerFactory.h5InputHandler.H5InputHandler)
 
+    def test_spec(self):
+        spcobj = self.factory.create("bla.spc",typehint="spec")
+        self.assertIsInstance(spcobj, inputHandlerFactory.specInputHandler.SpecInputHandler)
+
     # for now the test makes no sense; everything is mapped to fabio
     # unless there is a path given, which means that it is a hdf5 file
     # def test_unknown(self):
