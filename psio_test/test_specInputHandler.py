@@ -31,8 +31,8 @@ class TestspecInputHandler(unittest.TestCase):
     def test_emptyConstructor(self):
         self.assertIsNotNone(self.dataHandle)
 
-    #~ def test_getAll(self):
-        #~ print str(len(self.dhSPC.getAll()))
+    def test_getAll(self):
+        self.assertEqual(len(self.dhSPC.getAll()), 819)
 
     def test_getEntry(self):
         pass
