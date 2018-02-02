@@ -26,19 +26,19 @@ class TestspecInputHandler(unittest.TestCase):
 
     def setUp(self):
         self.dataHandle = specInputHandler.SpecInputHandler()
-        self.files = ["psio_test/test_data/spec/MnCo15.spc", ]
+        self.dhSPC = specInputHandler.SpecInputHandler(["psio_test/test_data/spec/MnCo15.spc",])
 
     def test_emptyConstructor(self):
-        pass
+        self.assertIsNotNone(self.dataHandle)
 
-    def test_getAll(self):
-        pass
+    #~ def test_getAll(self):
+        #~ print str(len(self.dhSPC.getAll()))
 
     def test_getEntry(self):
         pass
 
     def test_getNofEntries(self):
-        pass
+        self.assertEqual(self.dhSPC.getTotalNumberOfEntries(), 819)
 
 if __name__ == '__main__':
     unittest.main()
