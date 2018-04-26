@@ -35,7 +35,8 @@ class TestspecInputHandler(unittest.TestCase):
         self.assertEqual(len(self.dhSPC.getAll()), 819)
 
     def test_getEntry(self):
-        pass
+        scan = self.dhSPC.getEntry(699)
+        self.assertEqual(scan.getMotorName(), "pth")
 
     def test_getNofEntries(self):
         self.assertEqual(self.dhSPC.getTotalNumberOfEntries(), 819)
