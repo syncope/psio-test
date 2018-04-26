@@ -28,6 +28,7 @@ from . import test_h5InputHandler
 from . import test_hdf5Output
 from . import test_inputHandlerFactory
 from . import test_specInputHandler
+from . import test_specInputHandler2
 
 # initialize the test suite
 loader = unittest.TestLoader()
@@ -40,6 +41,7 @@ suite.addTests(loader.loadTestsFromModule(test_h5InputHandler))
 suite.addTests(loader.loadTestsFromModule(test_hdf5Output))
 suite.addTests(loader.loadTestsFromModule(test_inputHandlerFactory))
 suite.addTests(loader.loadTestsFromModule(test_specInputHandler))
+suite.addTests(loader.loadTestsFromModule(test_specInputHandler2))
 
 def run(verbosity=3):
     # initialize a runner, pass it your suite and run it

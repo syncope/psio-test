@@ -1,0 +1,44 @@
+# Copyright (C) 2017  Christoph Rosemann, DESY, Notkestr. 85, D-22607 Hamburg
+# email contact: christoph.rosemann@desy.de
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation in version 2
+# of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor,
+# Boston, MA  02110-1301, USA.
+
+'''This is the test for the h5py input module.'''
+
+import unittest
+from psio import specInputHandler
+
+
+class TestspecInputHandler2(unittest.TestCase):
+
+    def setUp(self):
+        self.dataHandle = specInputHandler.SpecInputHandler()
+        self.dhSPC = specInputHandler.SpecInputHandler(["psio_test/test_data/spec/cro05_2.spc",])
+
+    def test_emptyConstructor(self):
+        self.assertIsNotNone(self.dataHandle)
+
+    def test_getAll(self):
+        self.assertEqual(len(self.dhSPC.getAll()), 2724)
+
+    def test_getEntry(self):
+        pass
+
+    def test_getNofEntries(self):
+        self.assertEqual(self.dhSPC.getTotalNumberOfEntries(), 2724)
+
+if __name__ == '__main__':
+    unittest.main()
