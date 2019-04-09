@@ -31,6 +31,7 @@ class TestDataHandler(unittest.TestCase):
                                               "psio_test/test_data/hamamatsu_c4880_maxim/im_cont2_038.tif"])
         self.dhH5 = dataHandler.DataHandler("psio_test/test_data/lambda750ksi/Calli_align_00004.ndf",path="entry/instrument/detector/data")
         self.dhSPC = dataHandler.DataHandler("psio_test/test_data/spec/MnCo15.spc", typehint="spec")
+        self.dhFIO = dataHandler.DataHandler("psio_test/test_data/fio/EuPtIn4_remeasured_00349.fio", typehint="fio")
 
     def test_getters(self):
         self.assertEqual(self.dhH5.getTotalNumberOfEntries(), 1)
@@ -48,11 +49,14 @@ class TestDataHandler(unittest.TestCase):
             pass
         for j in self.dhSPC:
             pass
+        for n in self.dhFIO:
+            pass
 
     def tearDown(self):
         self.dhFAB = None
         self.dhH5 = None
         self.dhSPC = None
+        self.dhFIO = None
         self.dh = None
 
 if __name__ == '__main__':
