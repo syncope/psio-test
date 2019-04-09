@@ -16,7 +16,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 
-'''This is the test for the h5py input module.'''
+'''This is the test for the spec file reading module.'''
 
 import unittest
 from psio import specInputHandler

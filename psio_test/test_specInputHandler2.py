@@ -16,7 +16,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 
-'''This is the test for the h5py input module.'''
+'''This is another test for the spec file reading module.'''
 
 import unittest
 from psio import specInputHandler
@@ -37,7 +37,6 @@ class TestspecInputHandler2(unittest.TestCase):
     def test_getEntry(self):
         scan = self.dhSPC.getEntry(383)
         self.assertEqual(scan.getMotorName(), "e6cctrl_h")
-
 
     def test_getNofEntries(self):
         self.assertEqual(self.dhSPC.getTotalNumberOfEntries(), 2724)
